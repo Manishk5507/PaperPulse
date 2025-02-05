@@ -8,13 +8,32 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// Send verification email
 export const sendVerificationEmail = async (email, token) => {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
+  await transporter.sendMail({
+    from: `"PaperPulse: " <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'Email Verification',
-    html: `<p>Click <a href="${process.env.BASE_URL}/verify-email?token=${token}">here</a> to verify your email</p>`
-  };
+    subject: 'Verify Your Email',
+    html: `
+      <h2>Almost there!</h2>
+      <p>Click below to verify your email:</p>
+      <a href="${process.env.CLIENT_URL}/verify-email?token=${token}">
+        Verify Email
+      </a>
+    `
+  });
+};
 
-  await transporter.sendMail(mailOptions);
+// Send paper status notification
+export const sendStatusUpdateEmail = async (email, status, paperTitle) => {
+  await transporter.sendMail({
+    from: `"PaperPulse: " <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: `Paper ${status}`,
+    html: `
+      <h2>Your paper "${paperTitle}" has been ${status}</h2>
+      ${status === 'rejected' ? 
+        '<p>Reason: Please ensure the paper meets our guidelines</p>' : ''}
+    `
+  });
 };

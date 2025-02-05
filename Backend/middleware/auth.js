@@ -7,7 +7,7 @@ export const auth = async (req, res, next) => {
     if (!token) throw new ApiError(401, 'Authentication required');
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await mongoose.model('User').findById(decoded.id);
+    req.user = await User.findById(decoded.id);
     next();
   } catch (err) {
     next(new ApiError(401, 'Invalid authentication'));
