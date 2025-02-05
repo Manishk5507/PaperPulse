@@ -1,15 +1,16 @@
-import express from 'express';
-import { auth } from '../middleware/auth.js';
+import express from "express";
+import { auth } from "../middleware/auth.js";
+import { uploadMiddleware } from "../middleware/upload.js";
 import {
   getPapers,
   uploadPaper,
-  getPaperById
-} from '../controllers/paperController.js';
+  getPaperById,
+} from "../controllers/paperController.js";
 
 const router = express.Router();
 
-router.get('/', getPapers);
-router.get('/:id', getPaperById);
-router.post('/', auth, uploadPaper);
+router.get("/", getPapers);
+router.get("/:id", getPaperById);
+router.post("/upload", auth, uploadMiddleware, uploadPaper);
 
 export default router;

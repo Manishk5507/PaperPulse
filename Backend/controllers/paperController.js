@@ -8,16 +8,18 @@ export const uploadPaper = async (req, res, next) => {
     const { user } = req;
     const { year, semester, examType, subject } = req.body;
 
-    // Validate file
+    // Validate file (now from memory buffer)
     if (!req.file) throw new ApiError(400, "No file uploaded");
 
-    // Upload to Cloudinary
-    const fileUrl = await uploadToCloudinary(req.file.path);
+    // Upload to Cloudinary using buffer
+    const fileUrl = await uploadToCloudinary(req.file.buffer);
+
+    // console.log("user:  ", user);
 
     // Create paper record
     const paper = await Paper.create({
-      year,
-      semester,
+      year: Number(year),
+      semester: Number(semester),
       examType,
       subject,
       fileUrl,
@@ -26,14 +28,7 @@ export const uploadPaper = async (req, res, next) => {
       status: user.role === "admin" ? "approved" : "pending",
     });
 
-    res
-      .status(201)
-      .json(
-        new ApiResponse(
-          paper,
-          "Paper uploaded successfully. Awaiting admin approval."
-        )
-      );
+    res.status(201).json(new ApiResponse(paper, "Paper uploaded successfully"));
   } catch (err) {
     next(err);
   }

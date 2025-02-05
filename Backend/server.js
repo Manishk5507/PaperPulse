@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.js';
 import paperRoutes from './routes/papers.js';
 import adminRoutes from './routes/admin.js';
 import collegeRoutes from './routes/colleges.js';
+import testRoutes from './routes/test.js';
 import { errorHandler } from './middleware/error.js';
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/papers', paperRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/colleges', collegeRoutes);
+app.use('/api/test', testRoutes);
 
 // Error handling
 app.use(errorHandler);
