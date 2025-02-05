@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from './config/db.js';
+import { errorHandler } from './middleware/error.js';
 
 dotenv.config();
 const app = express();
